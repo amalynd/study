@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Security+ Acronym Quiz Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 20px;
+        }
+        #quiz-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .option-button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+        }
+        #next-button {
+            display: none;
+        }
+        .correct {
+            color: green;
+            font-weight: bold;
+        }
+        .incorrect {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="quiz-container">
+        <h1>Comprehensive Security+ Acronym Quiz Game</h1>
+        <div id="acronym-display"></div>
+        <div id="options-container"></div>
+        <button id="next-button">Next Acronym</button>
+        <div id="score-display">Score: 0</div>
+        <div id="explanation-display"></div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                acronym: "AAA",
+                correctAnswer: "Authentication, Authorization, and Accounting",
+                explanation: "AAA is a framework for managing user identities, controlling access, and auditing usage.",
+                options: [
+                    "Authentication, Authorization, and Accounting",
+                    "Advanced Access Architecture",
+                    "Automatic Account Authorization",
+                    "Access and Authorization Audit"
+                ]
+            },
+            {
+                acronym: "ACL",
+                correctAnswer: "Access Control List",
+                explanation: "ACL is a set of rules that control incoming and outgoing network traffic, determining whether specific traffic is allowed or denied.",
+                options: [
+                    "Access Control List",
+                    "Automatic Control Logic",
+                    "Application Communication Layer",
+                    "Account Configuration Log"
+                ]
+            },
+            {
+                acronym: "AES",
+                correctAnswer: "Advanced Encryption Standard",
+                explanation: "AES is a symmetric encryption algorithm used globally to secure sensitive data.",
+                options: [
+                    "Advanced Encryption Standard",
+                    "Automatic Encryption System",
+                    "Asymmetric Encoding Standard",
+                    "Authenticated Encryption Solution"
+                ]
+            },
+            {
+                acronym: "RSA",
+                correctAnswer: "Rivest-Shamir-Adleman",
+                explanation: "RSA is an asymmetric encryption algorithm used for secure data transmission, named after its inventors Rivest, Shamir, and Adleman.",
+                options: [
+                    "Rivest-Shamir-Adleman",
+                    "Random Security Algorithm",
+                    "Rapid Secure Authentication",
+                    "Remote Signature Authority"
+                ]
+            }
+        ];
+
+        let currentAcronymIndex = 0;
+        let score = 0;
+
+        const acronymDisplay = document.getElementById('acronym-display');
+        const optionsContainer = document.getElementById('options-container');
+        const nextButton = document.getElementById('next-button');
+        const scoreDisplay = document.getElementById('score-display');
+        const explanationDisplay = document.getElementById('explanation-display');
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function loadAcronym() {
+            const currentAcronym = quizData[currentAcronymIndex];
+            acronymDisplay.innerHTML = `<h2>${currentAcronym.acronym}</h2>`;
+            optionsContainer.innerHTML = '';
+            explanationDisplay.innerHTML = '';
+            currentAcronym.options.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'option-button';
+                button.innerText = option;
+                button.onclick = () => checkAnswer(option);
+                optionsContainer.appendChild(button);
+            });
+            nextButton.style.display = 'none';
+        }
+
+        function checkAnswer(selectedOption) {
+            const currentAcronym = quizData[currentAcronymIndex];
+            if (selectedOption === currentAcronym.correctAnswer) {
+                explanationDisplay.innerHTML = `<p class="correct">Correct!</p><p>${currentAcronym.explanation}</p>`;
+                score++;
+            } else {
+                explanationDisplay.innerHTML = `<p class="incorrect">Incorrect. The correct answer is: ${currentAcronym.correctAnswer}.</p><p>${currentAcronym.explanation}</p>`;
+            }
+            scoreDisplay.innerText = `Score: ${score}`;
+            nextButton.style.display = 'block';
+        }
+
+        nextButton.addEventListener('click', () => {
+            currentAcronymIndex++;
+            if (currentAcronymIndex < quizData.length) {
+                loadAcronym();
+            } else {
+                explanationDisplay.innerHTML = `<p>Quiz complete! Your final score is: ${score}</p>`;
+                currentAcronymIndex = 0;
+                score = 0;
+                scoreDisplay.innerText = `Score: ${score}`;
+                shuffle(quizData);
+                loadAcronym();
+            }
+        });
+
+        shuffle(quizData);
+        loadAcronym();
+    </script>
+</body>
+</html>
